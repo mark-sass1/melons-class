@@ -1,18 +1,16 @@
 """Classes for melon orders."""
 
+import random
+import datetime
+
 class AbstractMelonOrder:
     """An abstract base class that other Melon Orders inherit from."""
-
-    # the following 2 lines can be included, but are not necessary because 
-    # AbstractMelonOrder should never be instantiated directly
-
-    # order_type = None
-    # tax = 0
 
     def get_total(self):
         """Calculate price, including tax."""
 
-        base_price = 5
+        base_price = self.get_base_price()
+        
         # update christmas melon to cost 1.5 times
         if self.species == "christmas melon":
             base_price = (base_price * 1.5)
@@ -26,6 +24,23 @@ class AbstractMelonOrder:
         
         return total
 
+    def get_base_price(self):
+        
+        #if time between 8-11, add $4 surcharge to new_base
+        
+        time = datetime.datetime.now()
+        hour = time.hour
+        day = time.day
+
+        if hour in range(8, 12) and day in range(1, 6):
+            base = random.choice(range(5, 10)) + 4 
+        #else just $5 base
+        else:
+            base = 5 
+        
+    
+        return base
+    
     def mark_shipped(self):
         """Record the fact than an order has been shipped."""
 
@@ -81,5 +96,5 @@ class GovernmentMelonOrder(AbstractMelonOrder):
        self.passed_inspection = passed
 
 
-
-    
+# order1 = InternationalMelonOrder('watermelon', 5, "BR")
+# order1.get_total()
